@@ -23,4 +23,10 @@ android {
 dependencies {
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk7', version: kotlin_version
     implementation project(':rxar')
+
+    androidTestImplementation group: 'com.android.support.test', name: 'runner', version: test_runner_version
+    androidTestImplementation group: 'com.android.support.test', name: 'rules', version: test_runner_version
+    androidTestImplementation group: 'com.android.support.test.espresso', name: 'espresso-core', version: espresso_version
+
+    testImplementation group: 'junit', name: 'junit', version: junit_version
 }

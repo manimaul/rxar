@@ -72,7 +72,7 @@ internal class ActivityResultBroker : Fragment() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == this.requestCode) {
-      resultSubject.onNext(ActivityResult(requestCode, resultCode, data))
+      resultSubject.onNext(ActivityResult(resultCode, data))
       resultSubject.onComplete()
       fragmentManager?.beginTransaction()
           ?.remove(this)
