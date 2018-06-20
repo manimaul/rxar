@@ -59,3 +59,24 @@ task androidJavadocsJar(type: Jar, dependsOn: dokkaJavadoc) {
 
 apply from: rootProject.file('gradle/maven-publish-android.gradle')
 
+bintray {
+    user = bintray_user
+    key = bintray_key
+    dryRun = false
+    publish = true
+    publications = ['maven']
+    pkg {
+        userOrg = 'madrona'
+        repo = 'maven'
+        name = project.name
+        version {
+            name = project.version //Bintray logical version name
+        }
+        licenses = ['Apache-2.0']
+        websiteUrl = 'https://github.com/manimaul/rxar'
+        issueTrackerUrl = 'https://github.com/manimaul/rxar/issues'
+        vcsUrl = 'https://github.com/manimaul/rxar.git'
+        desc = 'rxjava rxkotlin tool for startActivityForResult'
+        labels = ['android', 'rxjava', 'rxkotlin', 'startActivityForResult']
+    }
+}

@@ -1,5 +1,15 @@
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
+task verifyBintrayConfig {
+    doLast {
+        println "bintray_user: $bintray_user"
+        println "bintray_key: $bintray_key"
+        println "name: $project.name"
+        println "group: $project.group"
+        println "version: $project.version"
+    }
+}
 
 task androidSourcesJar(type: Jar) {
     classifier = 'sources'
