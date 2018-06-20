@@ -1,0 +1,9 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation group: 'com.google.code.gson', name: 'gson', version: gson_version
+    implementation group: 'org.mockito', name: 'mockito-android', version: mockito_version
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"

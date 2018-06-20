@@ -1,1 +1,1 @@
-include ':app', ':rxar'
+include ':app', ':rxar', ':testtools'
