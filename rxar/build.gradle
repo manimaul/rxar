@@ -1,0 +1,61 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka-android'
+
+
+android {
+    compileSdkVersion sdk_version.toInteger()
+
+    defaultConfig {
+        minSdkVersion min_sdk_version.toInteger()
+        targetSdkVersion sdk_version.toInteger()
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk7', version: kotlin_version
+    api group: 'com.android.support', name: 'appcompat-v7', version: android_support_version
+    api group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava_version
+    api group: 'io.reactivex.rxjava2', name: 'rxandroid', version: rxjava_version
+    api group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: rxkotlin_version
+
+    androidTestImplementation group: 'com.android.support.test', name: 'runner', version: test_runner_version
+    androidTestImplementation group: 'com.android.support.test.espresso', name: 'espresso-core', version: espresso_version
+
+    testImplementation group: 'junit', name: 'junit', version: junit_version
+}
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaAndroidTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+
+    // Do not create index pages for empty packages
+    skipEmptyPackages = true
+
+    //Do not output deprecated members. Applies globally, can be overridden by packageOptions
+    skipDeprecated = false
+
+    //No default documentation link to kotlin-stdlib
+    noStdlibLink = false
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: dokkaJavadoc) {
+    classifier = 'javadoc'
+    from "$buildDir/javadoc"
+}
+
+apply from: rootProject.file('gradle/maven-publish-android.gradle')
+
