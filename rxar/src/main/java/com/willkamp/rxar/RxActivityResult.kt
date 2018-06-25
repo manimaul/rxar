@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import java.security.SecureRandom
 import java.util.concurrent.ThreadLocalRandom
 
@@ -53,9 +53,10 @@ object RxActivityResult {
 
 internal class ActivityResultBroker : Fragment() {
 
-  private val resultSubject = PublishSubject.create<ActivityResult>()
+  private val resultSubject = SingleSubject.create<ActivityResult>()
+
   val resultSingle: Single<ActivityResult>
-    get() = resultSubject.singleOrError()
+    get() = resultSubject.hide()
 
   private val requestCode: Int
     get() = arguments?.getInt(KEY_REQUEST_CODE) ?: 0
@@ -72,8 +73,7 @@ internal class ActivityResultBroker : Fragment() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     if (requestCode == this.requestCode) {
-      resultSubject.onNext(ActivityResult(resultCode, data))
-      resultSubject.onComplete()
+      resultSubject.onSuccess(ActivityResult(resultCode, data))
       fragmentManager?.beginTransaction()
           ?.remove(this)
           ?.commit()
@@ -82,6 +82,8 @@ internal class ActivityResultBroker : Fragment() {
 
   override fun onDestroy() {
     super.onDestroy()
-    resultSubject.onComplete()
+    if (!resultSubject.hasValue()) {
+      resultSubject.onError(IllegalStateException("onActivityResult never occurred"))
+    }
   }
 }

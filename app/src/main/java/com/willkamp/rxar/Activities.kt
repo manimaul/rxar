@@ -3,6 +3,7 @@ package com.willkamp.rxar
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 @SuppressLint("SetTextI18n")
 class MainActivity : AppCompatActivity() {
