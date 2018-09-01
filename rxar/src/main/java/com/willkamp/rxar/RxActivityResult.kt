@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom
 
 private const val MIN_16BIT_INT = 0
 private const val MAX_16BIT_INT = 65535
-private fun rand16BitInt(): Int {
+internal fun rand16BitInt(): Int {
   return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
     ThreadLocalRandom.current().nextInt(MIN_16BIT_INT, MAX_16BIT_INT + 1)
   } else {
