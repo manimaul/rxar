@@ -1,8 +1,13 @@
 package com.willkamp.rxar
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Context
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.content.PermissionChecker
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.SingleSubject
@@ -27,6 +32,22 @@ object RxPermission {
           .commit()
       broker.resultObservable
     }.subscribeOn(AndroidSchedulers.mainThread())
+  }
+
+  /**
+   * Lazily request course and fine location permissions when not already granted.
+   */
+  fun checkLocationPermissionLazyRequest(context: Context, fragmentManager: FragmentManager): Single<Boolean> {
+    return if (PERMISSION_GRANTED == PermissionChecker.checkSelfPermission(context, ACCESS_FINE_LOCATION) &&
+        PERMISSION_GRANTED == PermissionChecker.checkSelfPermission(context, ACCESS_COARSE_LOCATION)) {
+      Single.just(true)
+    } else {
+      requestPermissions(fragmentManager, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION).map {
+        it.fold(true) { acc, permissionRequestResult ->
+          acc && permissionRequestResult.isGranted
+        }
+      }
+    }
   }
 }
 
