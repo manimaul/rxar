@@ -18,6 +18,6 @@ repositories {
 }
 
 dependencies {
- implementation group: 'com.willkamp', name: 'rxar', version: '0.0.1'
+ implementation group: 'com.willkamp', name: 'rxar', version: '0.0.3'
 }
 ```
